@@ -15,7 +15,7 @@ const isOwner = async (req, res, next) => {
     if (req.payload && req.payload._id == cohortFound.userId) {
       return next();
     } else {
-      res.status(400).json({ message: "Not authorized to delete this cohort" });
+      res.status(400).json({ message: "Not authorized to manage this cohort" });
     }
   } catch (err) {
     res.status(500).json({
