@@ -10,36 +10,22 @@ const cleanStudentsInput = require("../utils/cleanStudentsInput.js")
 router.post("/", async (req, res, next) => {
 
     const userId = req.payload._id 
-    const {
-      teacherName,
-      cohortName,
-      studentsNames,
-      projectSettings, // {projectType, preferencesNumber, blockedNumber}
-    } = req.body;
+    const { teacherName, cohortName, studentsNames } = req.body;
 
     try {
         const createStudentsObj = cleanStudentsInput(studentsNames).map((studentName) => {
           return {studentName}
         })
-        console.log(createStudentsObj)
+        console.log('student cleaning',createStudentsObj)
 
         const createStudents = await Student.insertMany(createStudentsObj) 
 
         const students = createStudents.sort().map((student) => student._id)
 
-        const projects = []
-
-        if (projectSettings) {
-          const createProject = await Project.create({ ...projectSettings, partecipants: students });
-          projects.push(createProject._id);
-          // should also push project._id into each students
-        }
-
         const newCohort = {
             teacherName,
             cohortName,
             students,
-            projects,
             userId
         };
 
@@ -53,6 +39,7 @@ router.post("/", async (req, res, next) => {
           message: "error creating a new cohort",
           error: err,
         });
+        next(err)
       };
 })
 
@@ -61,7 +48,7 @@ router.get("/", async (req, res, next) => {
     const userId = req.payload._id
 
   try {
-        const getMyCohorts = await Cohort.find({userId})
+        const getMyCohorts = await Cohort.find({ userId }).sort({ createdAt: -1 })
         return res.json(getMyCohorts);
     }
       catch (err) {
@@ -70,6 +57,7 @@ router.get("/", async (req, res, next) => {
           message: "error getting your cohorts",
           error: err,
         });
+        next(err)
       };
 });
 
@@ -78,7 +66,7 @@ router.get("/:cohortId", isOwner, async (req, res, next) => {
     const { cohortId } = req.params
 
   try {
-        const getCohort = await Cohort.findById(cohortId).populate('students').populate('projects')
+        const getCohort = await Cohort.findById(cohortId).populate('students').populate({path: 'projects',options: { sort: { createdAt: -1 } }})
         return res.json(getCohort);
     }
       catch (err) {
@@ -87,12 +75,13 @@ router.get("/:cohortId", isOwner, async (req, res, next) => {
           message: `error getting cohort with ID: ${cohortId}`,
           error: err,
         });
+        next(err)
       };
 });
 
 router.delete("/:cohortId", isOwner, async (req, res, next) => {
   const { cohortId } = req.params;
-
+// should also delete all projects and students related
   try {
     const deleteCohort = await Cohort.findByIdAndDelete(cohortId);
     if (deleteCohort) {
@@ -104,6 +93,7 @@ router.delete("/:cohortId", isOwner, async (req, res, next) => {
       message: `error deleting cohort: ${cohortId}`,
       error: err,
     });
+    next(err)
   }
 });
 
