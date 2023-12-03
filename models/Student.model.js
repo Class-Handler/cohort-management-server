@@ -10,25 +10,6 @@ const studentSchema = new Schema(
       // unique: true,
     },
 
-    projects: [{
-      projectType: {
-        type: Schema.Types.ObjectId,
-        ref: "Project",
-      },
-
-      preferences: {
-        type: [String],
-        lowercase: true,
-        required: [true, "Preferences are required."],
-      },
-
-      blocked: {
-        type: [String],
-        lowercase: true,
-        default: ["NO PREFERENCES"],
-      },
-    }],
-
     pairedWith: {
       type: [String],
       lowercase: true,
@@ -38,6 +19,11 @@ const studentSchema = new Schema(
       type: [String],
       lowercase: true,
     },
+     
+    projects: [{
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    }],
   },
 
   {
