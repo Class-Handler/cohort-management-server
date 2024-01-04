@@ -8,6 +8,7 @@ const projectSchema = new Schema(
       enum: [
         "Project 2",
         "Final Project",
+        "Mini Project Mod 1",
         "Mini Project Mod 2",
         "Mini Project Mod 3",
       ],
