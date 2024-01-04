@@ -13,14 +13,13 @@ router.post("/", async (req, res, next) => {
     const { teacherName, cohortName, studentsNames } = req.body;
 
     try {
-        const createStudentsObj = cleanStudentsInput(studentsNames).map((studentName) => {
+        const createStudentsObj = cleanStudentsInput(studentsNames).sort().map((studentName) => {
           return {studentName}
         })
-        console.log('student cleaning',createStudentsObj)
 
         const createStudents = await Student.insertMany(createStudentsObj) 
 
-        const students = createStudents.sort().map((student) => student._id)
+        const students = createStudents.map((student) => student._id)
 
         const newCohort = {
             teacherName,
@@ -66,7 +65,7 @@ router.get("/:cohortId", isOwner, async (req, res, next) => {
     const { cohortId } = req.params
 
   try {
-        const getCohort = await Cohort.findById(cohortId).populate('students').populate({path: 'projects',options: { sort: { createdAt: -1 } }})
+        const getCohort = await Cohort.findById(cohortId).populate('students').populate({path: 'projects',options: { sort: { createdAt: -1 } }}).populate({ path: "userId", select:'email'})
         return res.json(getCohort);
     }
       catch (err) {
