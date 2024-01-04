@@ -35,8 +35,8 @@ router.post("/",  async (req, res, next) => {
 
 router.get("/:projectId", async (req, res, next) => {
   try {
-    const getProject = await Project.findById(req.params.projectId).populate({path: 'partecipants'}).populate({path: 'partecipantsPreference'})
-    res.json(getProject)
+    const project = await Project.findById(req.params.projectId).populate({path: 'partecipants'}).populate({path: 'partecipantsPreference'})
+    res.json(project)
   } catch (err) {
     console.log("error getting project", err);
     res.status(500).json({
