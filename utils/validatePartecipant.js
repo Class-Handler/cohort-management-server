@@ -1,11 +1,10 @@
 const validatePartecipant = (partecipantsArr, studentName) => {
-  const partecipants = partecipantsArr.map((el) => {
-    return el.studentName;
+  const isPartecipant = partecipantsArr.filter((el) => {
+    return el.studentName === studentName.trim().toLowerCase();
   });
-  const isPartecipant = () =>
-    partecipants.includes(studentName.trim().toLowerCase());
+  console.log(isPartecipant)
 
-    return isPartecipant()
+    return isPartecipant
 
 };
 
