@@ -1,5 +1,22 @@
 const { Schema, model } = require("mongoose");
 
+const preferenceSchema = new Schema(
+{
+    projectId: {
+     type: Schema.Types.ObjectId,
+     ref: "Project"
+   },
+
+    preferences: {
+     type: [String],
+   },
+
+    blocked: {
+     type: [String],
+   },
+  }
+)
+
 const studentSchema = new Schema(
   {
     studentName: {
@@ -11,19 +28,11 @@ const studentSchema = new Schema(
     },
 
     pairedWith: {
-      type: [String],
-      lowercase: true,
-    },
-
-    neverPairedWith: {
-      type: [String],
-      lowercase: true,
+      type: [Schema.Types.ObjectId],
+      ref: "Student"
     },
      
-    projects: [{
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-    }],
+    projectsPreferences: [ preferenceSchema ] ,
   },
 
   {

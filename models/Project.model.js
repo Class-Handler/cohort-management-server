@@ -41,31 +41,10 @@ const projectSchema = new Schema(
       ref: "Student",
     },
 
-    preferencesOpen: {
-      type: Boolean,
-      default: false
-    },
-
-    partecipantsPreference: [
-      {
-        student: {
-          type: Schema.Types.ObjectId,
-          ref: "Student",
-        },
-
-        preferences: {
-          type: [String],
-          lowercase: true,
-          required: [true, "Preferences are required."],
-        },
-
-        blocked: {
-          type: [String],
-          lowercase: true,
-          default: ["NO PREFERENCES"],
-        },
-      },
-    ],
+    partecipantsPreference: {
+      type: [Schema.Types.ObjectId],
+      ref: "Student",
+    }
   },
 
   {
