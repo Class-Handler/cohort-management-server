@@ -9,8 +9,15 @@ module.exports = (app) => {
     // always logs the error
     console.error("ERROR", req.method, req.path, err);
 
+    if(err.code === 'invalid_token'){
+      res.status(500).json({
+        message: "Session expired",
+      });
+    }
+
     // only render if the error ocurred before sending the response
     if (!res.headersSent) {
+      
       res.status(500).json({
         message: "Internal server error. Check the server console",
       });
