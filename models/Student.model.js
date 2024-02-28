@@ -8,11 +8,11 @@ const preferenceSchema = new Schema(
    },
 
     preferences: {
-     type: [String],
+     type: [],
    },
 
     blocked: {
-     type: [String],
+     type: [],
    },
   }
 )
