@@ -1,11 +1,11 @@
 const validatePartecipant = (partecipantsArr, studentName) => {
   const isPartecipant = partecipantsArr.filter((el) => {
-    return el.studentName === studentName.trim().toLowerCase();
+    return (
+      el.studentName.startsWith(studentName.trim().toLowerCase()) &&
+      el.studentName.includes(studentName.trim().toLowerCase())
+    );
   });
-  console.log(isPartecipant)
-
-    return isPartecipant
-
+  return isPartecipant;
 };
 
 module.exports = validatePartecipant;
