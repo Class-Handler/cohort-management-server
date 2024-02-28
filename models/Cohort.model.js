@@ -35,6 +35,10 @@ const cohortSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    accessTo: {
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+  },
   },
 
   {
